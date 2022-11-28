@@ -1,4 +1,3 @@
-const { runInNewContext } = require('vm');
 const { User, Thought } = require('../models');
 
 module.exports = {
