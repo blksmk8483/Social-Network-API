@@ -5,13 +5,6 @@ const routes = require('./routes');
 const PORT = process.env.PORT || 3001;
 const app = express();
 
-//-------- I am modeling the examples - It says it is optional and I don't know exactly what this is doing so I am commiting it out for the moment. 
-
-// // Note: not necessary for the Express server to function. This just helps indicate what activity's server is running in the terminal.
-// const activity = cwd.includes('01-Activities')
-//   ? cwd.split('/01-Activities/')[1]
-//   : cwd;
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(routes);

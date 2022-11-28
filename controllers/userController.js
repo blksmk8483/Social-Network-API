@@ -7,7 +7,7 @@ module.exports = {
             .then((allUsers) => res.json(allUsers))
             .catch((err) => res.status(500).json(err));
     },
-    
+
     // -------- GET SINGLE USER --------
     getSingleUser(req, res) {
         User.findOne({ _id: req.params.userId })
@@ -44,25 +44,6 @@ module.exports = {
             )
             .catch((err) => res.status(500).json(err));
     },
-
-    // ---- example to update a single / Mini Project/courseController 
-    // updateCourse(req, res) {
-    //     Course.findOneAndUpdate(
-    //       { _id: req.params.courseId },
-    //       { $set: req.body },
-    //       { runValidators: true, new: true }
-
-    // ---------- I don't have validation on mine...should I??? ------------
-
-    //     )
-    //       .then((course) =>
-    //         !course
-    //           ? res.status(404).json({ message: 'No course with this id!' })
-    //           : res.json(course)
-    //       )
-    //       .catch((err) => res.status(500).json(err));
-    //   },
-
 
     // -------- DELETE USER --------
     deleteUser(req, res) {
