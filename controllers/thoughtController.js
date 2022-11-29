@@ -42,27 +42,95 @@ module.exports = {
             .catch((err) => res.status(500).json(err));
     },
 
-        // -------- DELETE THOUGHT --------
+    // -------- DELETE THOUGHT --------
     deleteThought(req, res) {
         Thought.findOneAndRemove({ _id: req.params.thoughtId })
-        .then((deletedThought) => 
-            !deletedThought
-                ? res.status(404).json({ message: 'Oh no!, No thought with that id was found.' })
-                : User.findOneAndUpdate(
-                    { thoughts: req.params.thoughtId },
-                    { $pull: { thoughts: req.params.thoughtId } },
-                    { new: true }
-                )
+            .then((deletedThought) =>
+                !deletedThought
+                    ? res.status(404).json({ message: 'Oh no!, No thought with that id was found.' })
+                    : User.findOneAndUpdate(
+                        { thoughts: req.params.thoughtId },
+                        { $pull: { thoughts: req.params.thoughtId } },
+                        { new: true }
+                    )
+            )
+            .then((thought) =>
+                !thought
+                    ? res.status(404).json({ message: 'Thought was deleted but could not find User' })
+                    : res.json({ message: 'Thought was successfully deleted.' })
+            )
+            .catch((err) => {
+                res.status(500).json(err);
+            });
+    },
+    // -------- CREATE REACTION --------
+    createReaction(req, res) {
+        Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId },
+            { $addToSet: { reactions: req.body } },
+            { new: true }
         )
-        .then((thought) => 
-            !thought
-            ? res.status(404).json({ message: 'Thought was deleted but could not find User'})
-            : res.json({ message:'Thought was successfully deleted.' })
-        )
-        .catch((err) => {
-            res.status(500).json(err);
-        });  
+            .then((reaction) =>
+                !reaction
+                    ? res
+                        .status(404)
+                        .json({ message: 'No reaction found with that ID.' })
+                    : res.json(reaction)
+            )
+            .catch((err) => res.status(500).json(err));
     },
 
-
+    // -------- DELETE REACTION --------
+    deleteReaction(req, res) {
+        Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId },
+            { $pull: { reactions: { req.params.reactionId } } },
+            { new: true }
+        )
+            .then((reaction) =>
+                !reaction
+                    ? res
+                        .status(404)
+                        .json({ message: 'No reaction found with that ID.' })
+                    : res.json(reaction)
+            )
+            .catch((err) => res.status(500).json(err));
+    },
 };
+
+// ------- MODEL FOR THE LAST TWO --------
+
+// // Add an assignment to a student
+// addAssignment(req, res) {
+//     console.log('You are adding an assignment');
+//     console.log(req.body);
+//     Student.findOneAndUpdate(
+//       { _id: req.params.studentId },
+//       { $addToSet: { assignments: req.body } },
+//       { runValidators: true, new: true }
+//     )
+//       .then((student) =>
+//         !student
+//           ? res
+//               .status(404)
+//               .json({ message: 'No student found with that ID :(' })
+//           : res.json(student)
+//       )
+//       .catch((err) => res.status(500).json(err));
+//   },
+//   // Remove assignment from a student
+//   removeAssignment(req, res) {
+//     Student.findOneAndUpdate(
+//       { _id: req.params.studentId },
+//       { $pull: { assignment: { assignmentId: req.params.assignmentId } } },
+//       { runValidators: true, new: true }
+//     )
+//       .then((student) =>
+//         !student
+//           ? res
+//               .status(404)
+//               .json({ message: 'No student found with that ID :(' })
+//           : res.json(student)
+//       )
+//       .catch((err) => res.status(500).json(err));
+//   },
