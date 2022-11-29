@@ -23,13 +23,14 @@ const thoughtSchema = new Schema(
             virtuals: true,
             getters: true,
         },
+        id: false
     }
 );
 
 thoughtSchema
     .virtual('reactionCount')
     .get(function () {
-        return `REACTION COUNT: ${this.reactions.length}`
+        return this.reactions.length
     });
 
 
