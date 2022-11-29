@@ -11,11 +11,10 @@ module.exports = {
     // -------- GET SINGLE THOUGHT --------
     getSingleThought(req, res) {
         Thought.findOne({ _id: req.params.thoughtId })
-            .select('-__V')
             .then((singleThought) =>
                 !singleThought
                     ? res.status(404).json({ message: 'No thought to be found!' })
-                    : res.json(singleThought)
+                    : res.status(200).json(singleThought)
             )
             .catch((err) => res.status(500).json(err));
     },
