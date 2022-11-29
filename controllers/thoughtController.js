@@ -84,7 +84,7 @@ module.exports = {
     deleteReaction(req, res) {
         Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
-            { $pull: { reactions: { req.params.reactionId } } },
+            { $pull: { reactions: { reactionId: req.params.reactionId } } },
             { new: true }
         )
             .then((reaction) =>
@@ -97,40 +97,3 @@ module.exports = {
             .catch((err) => res.status(500).json(err));
     },
 };
-
-// ------- MODEL FOR THE LAST TWO --------
-
-// // Add an assignment to a student
-// addAssignment(req, res) {
-//     console.log('You are adding an assignment');
-//     console.log(req.body);
-//     Student.findOneAndUpdate(
-//       { _id: req.params.studentId },
-//       { $addToSet: { assignments: req.body } },
-//       { runValidators: true, new: true }
-//     )
-//       .then((student) =>
-//         !student
-//           ? res
-//               .status(404)
-//               .json({ message: 'No student found with that ID :(' })
-//           : res.json(student)
-//       )
-//       .catch((err) => res.status(500).json(err));
-//   },
-//   // Remove assignment from a student
-//   removeAssignment(req, res) {
-//     Student.findOneAndUpdate(
-//       { _id: req.params.studentId },
-//       { $pull: { assignment: { assignmentId: req.params.assignmentId } } },
-//       { runValidators: true, new: true }
-//     )
-//       .then((student) =>
-//         !student
-//           ? res
-//               .status(404)
-//               .json({ message: 'No student found with that ID :(' })
-//           : res.json(student)
-//       )
-//       .catch((err) => res.status(500).json(err));
-//   },
